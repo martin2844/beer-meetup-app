@@ -1,0 +1,16 @@
+{
+  "name": "2afc462e-e2b0-43a4-96fd-9cfa60cb2675",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git-rba.hackerrank.com/git/2afc462e-e2b0-43a4-96fd-9cfa60cb2675"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
