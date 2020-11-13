@@ -14,7 +14,7 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 
 # Node
-
+.env
 # Logs
 logs
 *.log

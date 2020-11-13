@@ -17,7 +17,7 @@ Endpoint básico de obtener temperatura
 ```
 * Como usuario y como admin quiero poder recibir notificaciones para estar al tanto de las meetups. 
 ```
-Basicamente, hay dos facetes de este punto. Primero estructurar que cada usuario en la BD tenga notificaciones.
+Basicamente, hay dos facetas de este punto. Primero estructurar que cada usuario en la BD tenga notificaciones.
 Cada notificacion es un objeto. Con lo cual dentro del Schema del usuario vamos a tener lo siguiente:
 
 notifications: {

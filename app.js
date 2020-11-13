@@ -2,13 +2,31 @@ const express = require('express');
 require('dotenv').config();
 const connectDB = require("./config/db");
 const logger = require('./utils/logger')(module);
+const session = require('express-session');
+const passport = require('passport');
+
 //initialize express.
 const app = express();
-const weatherController = require("./controller/weather.controller");
+
 
 //Body Parser
 app.use(express.json({ extended: false, limit: '50mb'}));
 app.use(express.urlencoded({extended: false, limit: '50mb' }));
+
+//Express Session Middleware
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true,
+  cookie: { secure: false, maxAge: 1000*60*60*24*30 }
+}));
+
+//passport MiddleWare
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Passport Config
+require('./config/passport')(passport);
 
 //public dir
 app.use('/public', express.static(__dirname + '/public/'));
@@ -17,11 +35,11 @@ app.use('/public', express.static(__dirname + '/public/'));
 connectDB();
 
 
-// weatherController.getWeather().then(x => console.log(x));
-//ROUTES
+
 
 //Routes
 app.use("/api/weather", require("./routes/weather"));
+app.use("/api/auth/", require("./routes/auth.js"));
 
 // Add logger process.on
 process.on('unhandledRejection', (reason, p) => {
