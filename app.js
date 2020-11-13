@@ -35,11 +35,10 @@ app.use('/public', express.static(__dirname + '/public/'));
 connectDB();
 
 
-
-
 //Routes
 app.use("/api/weather", require("./routes/weather"));
-app.use("/api/auth/", require("./routes/auth.js"));
+app.use("/api/auth/", require("./routes/auth"));
+app.use("/api/meetup/", require("./routes/meetup"));
 
 // Add logger process.on
 process.on('unhandledRejection', (reason, p) => {

@@ -38,15 +38,15 @@ Se le podrìa agregar notificaciones por email.
 
 La segunda faceta serìa en el front, es decir, cuando el usuario está navegando tiene una pestaña de notificaciones. Cuantas levantaria de la BD, como las levanta. Etc.
 ```    
-* Como admin quiero armar una meetup para poder invitar otras personas.      
+* Como admin quiero armar una meetup para poder invitar otras personas.  - DONE    
 ```
 Protected route, es decir un endpoint para armar meetup que solo podes usarlo si estas logueado, y con rol de administrador.
 ```
-* Como usuario quiero inscribirme en una meetup para poder asistir.       
+* Como usuario quiero inscribirme en una meetup para poder asistir.       - DONE
 ```
 Endpoint para Inscribirse como usuario en una meetup. 
 ```
-* Como usuario quiero hacer check-in en una meetup para poder avisar que estuve ahí.    
+* Como usuario quiero hacer check-in en una meetup para poder avisar que estuve ahí.    - DONE
 ```
 Endpoint de check-in.
 ```

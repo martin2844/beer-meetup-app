@@ -5,37 +5,20 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const User = require("../models/User");
 const logger = require("../utils/logger")(module);
+const {isLoggedIn, isLoggedInAndAdmin} = require("../controller/auth.controller");
 
-const isLoggedIn = (req, res, next) => {
-    if (req.user) {
-        console.log(req.user);
-        next();
-    } else {
-        res.redirect('login');
-    }
-  }
-
-
-  const isLoggedInAndAdmin = (req, res, next) => {
-    if (req.user && req.user.isAdmin) {
-        next();
-    } else {
-        res.status(404).send("No se encontró :(");
-    }
-  }
 
   router.get("/protectedAdmin", isLoggedInAndAdmin, (req, res) => {
     res.send("logged admin");
 })
 
-
- router.get("/protected", isLoggedIn, (req, res) => {
+router.get("/protected", isLoggedIn, (req, res) => {
      res.send("logged");
- })
+})
 
- router.get("/login", (req, res) => {
+router.get("/login", (req, res) => {
      res.status(200).send("Por favor Logueate");
- })
+})
 
 //Login Route
   router.post('/login', (req, res, next) => {
@@ -52,7 +35,7 @@ const isLoggedIn = (req, res, next) => {
              res.send(err);
          }
          logger.info("User Correctly logged in.")
-         return res.json(user);
+         return res.status(200).send("Usuario Correctamente Logueado");
       });
 
 })(req, res, next)});
