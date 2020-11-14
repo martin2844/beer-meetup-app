@@ -1,31 +1,74 @@
-import React from 'react'
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
-
+import React, {useContext, useState} from 'react'
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import axios from 'axios';
+import {UserContext} from '../UserContext';
+import {Redirect} from 'react-router-dom';
 
 const Login = () => {
+    const [user, setUserData] = useContext(UserContext);
+    const [alert, setAlert] = useState({
+      alert: false,
+      message: ""
+    }) 
+    const [redirect, setRedirect] = useState(false);
 
-    const Login = (e) => {
+    const Login = async (e) => {
       e.preventDefault();
       console.log("Login")
+      const user = {
+        email: e.target.email.value,
+        password: e.target.password.value
+      }
+      let auth = await axios.post("/api/auth/login", user);
+      if(auth.status === 200) {
+        let {name} = auth.data;
+        let email = auth.data.user;
+        //Auth user
+        setUserData({
+          isAuthenticated: true,
+          user: {
+              name: name,
+              email: email
+          }
+      }) 
+      setRedirect(true);
+      } else {
+        //set alerts
+      }
     }
 
-    const Register = (e) => {
+    const Register = async (e) => {
       e.preventDefault();
       console.log("Register")
-    }
+      const user = {
+        name: e.target.name.value,
+        email: e.target.email.value,
+        password: e.target.password.value,
+        password2: e.target.password2.value
+      }
+      let auth = await axios.post("/api/auth/register", user);
+      console.log(auth);
+      
+      if(auth.status === 200) { 
 
+      } else {
+
+      }
+
+    }
 
     return (
         <section className="login-form">
+           {redirect && <Redirect to='/'/> }
         <Form onSubmit={e => Login(e)}>
         <h1>Login</h1>
         <FormGroup>
           <Label for="exampleEmail">Email</Label>
-          <Input type="email" name="email" id="exampleEmail" placeholder="email" />
+          <Input type="email" name="email" id="exampleEmail1" placeholder="email" />
         </FormGroup>
         <FormGroup>
           <Label for="examplePassword">Password</Label>
-          <Input type="password" name="password" id="examplePassword" placeholder="contraseña" />
+          <Input type="password" name="password" id="examplePassword1" placeholder="contraseña" />
         </FormGroup>
         <Button>Submit</Button>
     </Form>

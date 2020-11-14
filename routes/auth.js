@@ -35,7 +35,10 @@ router.get("/login", (req, res) => {
              res.send(err);
          }
          logger.info("User Correctly logged in.")
-         return res.status(200).send("Usuario Correctamente Logueado");
+         return res.status(200).send({
+           user: user.email,
+           name: user.name
+         });
       });
 
 })(req, res, next)});
@@ -88,7 +91,10 @@ router.post(
         await user.save();
         console.log(user);
         logger.info("User Correctly registered")
-        res.send("Usuario registrado correctamente");        
+        res.send({
+          email: user.email,
+          name: user.name
+        });        
       } catch (err) {
           logger.error(err.message);
           res.status(500).send('server error');
@@ -101,10 +107,11 @@ router.post(
     logger.info("Logging out user: " + req.user.name);
     req.session.destroy((err) => {
         if(err) {
-            return logger.error(error);
+          logger.error(error);
+          res.status(500).send(err)
         }
         req.logout();
-        res.send("Logout correcto :)")
+        res.status(200).send("Logout correcto :)")
     });})
 
   

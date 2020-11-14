@@ -8,12 +8,15 @@ const Meetup = () => {
     const [meetups, setMeetups] = useState([]);
     const [loading, setLoading] = useState(true);
     
-    useEffect(async () => {
-        const meetupRequest = await axios.get("/api/meetup/getAll");
+    useEffect(() => {
+        const populate = async () => {
+        let meetupRequest = await axios.get("/api/meetup/getAll");
         setMeetups(meetupRequest.data);
         setTimeout(() => {
             setLoading(false);
         }, 200);
+        } 
+        populate();
         
     }, [])
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Collapse,
   Navbar,
@@ -6,18 +6,15 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  NavbarText
+  NavLink
 } from 'reactstrap';
 import { Link } from 'react-router-dom'
+import {UserContext} from '../UserContext';
 
 const MyNavbar = (props) => {
+  const [user] = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
-
+  console.log(user);
   const toggle = () => setIsOpen(!isOpen);
 
   return (
@@ -36,7 +33,12 @@ const MyNavbar = (props) => {
           </Nav>
           <Nav navbar>
           <NavItem>
-              <NavLink  tag={Link} to='/login'>Login</NavLink>
+             {
+               user.isAuthenticated ? 
+               <NavLink  tag={Link} to='/logout'>Logout</NavLink> : 
+               <NavLink  tag={Link} to='/login'>Login</NavLink>
+             }
+              
           </NavItem>
           </Nav>
           
