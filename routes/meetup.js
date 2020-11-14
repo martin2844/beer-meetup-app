@@ -7,6 +7,7 @@ const beerController = require("../controller/beer.controller");
 const weatherDate = require('../utils/weatherDate');
 const weatherController = require("../controller/weather.controller");
 
+//Create Meetup
 router.post("/create", isLoggedInAndAdmin, async (req, res) => {
     let {name, date} = req.body;
     //Date manipulation for it to be a correct format for our schema
@@ -30,6 +31,23 @@ router.post("/create", isLoggedInAndAdmin, async (req, res) => {
     }
 });
 
+//Delete meetup by ID
+router.delete("/delete/:id", isLoggedInAndAdmin, async (req, res) => {
+    const meetupID = req.params.id;
+    try {
+        let deleted = await meetupController.deleteMeetup(meetupID);
+        if(deleted) {
+            res.status(200).send("Meetup borrada exitosamente");
+        } else {
+            res.status(404).send("No se encontró la Meetup");
+        }
+        
+    } catch (error) {
+        res.status(500).send("error borrando meetup")
+    }
+})
+
+//Register as attendee
 router.post("/attend/:id", isLoggedIn, async (req, res) => {
     const meetupID = req.params.id;
     try {
@@ -42,6 +60,7 @@ router.post("/attend/:id", isLoggedIn, async (req, res) => {
 
 });
 
+//Check in in meetup
 router.post("/checkin/:id", isLoggedIn, async (req, res) => {
     const meetupID = req.params.id;
     try {
@@ -53,6 +72,7 @@ router.post("/checkin/:id", isLoggedIn, async (req, res) => {
 
 });
 
+//Get beer amounts for meetup with ID
 router.get("/beerAmounts/:id", isLoggedInAndAdmin, async (req, res) => {
     try {
         const meetupID = req.params.id;
@@ -64,6 +84,7 @@ router.get("/beerAmounts/:id", isLoggedInAndAdmin, async (req, res) => {
   
 })
 
+//Check weather for meetup with id
 router.get("/checkWeather/:id", isLoggedIn, async (req, res) => {
     try {
         const meetupID = req.params.id;
@@ -75,6 +96,15 @@ router.get("/checkWeather/:id", isLoggedIn, async (req, res) => {
         } else {
             res.status(200).send(forecast.temp.max.toString());
         }   
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
+router.get("/getAll", async (req, res) => {
+    try {
+        const meetups = await meetupController.getAllMeetups();
+        res.status(200).send(meetups);
     } catch (error) {
         res.status(500).send(error);
     }

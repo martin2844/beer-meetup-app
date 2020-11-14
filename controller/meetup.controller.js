@@ -1,7 +1,19 @@
 const Meetup = require('../models/Meetup');
 const logger = require('../utils/logger')(module);
 
-
+const deleteMeetup = async(id) => {
+    logger.info("About to delete meetup: " + id);
+    try {
+        let deleted = await Meetup.findOneAndDelete({_id: id});
+        if(!deleted) {
+            throw ("Meetup Not Found");
+        }
+        return true;
+    } catch (error) {
+        logger.error(error);
+        return false
+    }
+}
 
 //Create meetup Function
 const createMeetup = async (meetupData) => {
@@ -53,6 +65,15 @@ const getMeetup = async (id) => {
     }
 }
 
+const getAllMeetups = async () => {
+    try {
+        const meetups = await Meetup.find();
+        return meetups;
+    } catch (error) {
+        return error;
+    }
+}
+
 
 
 
@@ -61,5 +82,7 @@ module.exports = {
     createMeetup,
     addAttendee,
     checkIn,
-    getMeetup
+    getMeetup,
+    deleteMeetup,
+    getAllMeetups
 }

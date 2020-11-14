@@ -96,6 +96,16 @@ router.post(
   
     }
   );
-  
 
+  router.get('/logout',(req,res) => {
+    logger.info("Logging out user: " + req.user.name);
+    req.session.destroy((err) => {
+        if(err) {
+            return logger.error(error);
+        }
+        req.logout();
+        res.send("Logout correcto :)")
+    });})
+
+  
 module.exports = router;
