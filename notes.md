@@ -7,7 +7,7 @@ Tenemos un proveedor que nos vende cajas de 6 unidades de birras. El problema es
 ## Este es nuestro backlog, ¿desarrollamos?
 #### Cada historia de usuario una tiene su parte front y back, las dos primeras son obligatorias y cuantas más hagas, ¡mejor!
 
-* Como admin quiero saber cuántas cajas de birras tengo que comprar para poder aprovisionar la meetup.   
+* Como admin quiero saber cuántas cajas de birras tengo que comprar para poder aprovisionar la meetup.  - Done
 ```
 Endpoint principal, combina weather api + calculo de birras según atendees
 ```

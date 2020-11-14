@@ -2,6 +2,7 @@ const Meetup = require('../models/Meetup');
 const logger = require('../utils/logger')(module);
 
 
+
 //Create meetup Function
 const createMeetup = async (meetupData) => {
     const meetUp = new Meetup({
@@ -43,6 +44,15 @@ const checkIn = async (id, user_id) => {
     }
 }
 
+const getMeetup = async (id) => {
+    try {
+        const meetup = await Meetup.findById(id);
+        return meetup;
+    } catch (error) {
+        return error;
+    }
+}
+
 
 
 
@@ -50,5 +60,6 @@ const checkIn = async (id, user_id) => {
 module.exports = {
     createMeetup,
     addAttendee,
-    checkIn
+    checkIn,
+    getMeetup
 }

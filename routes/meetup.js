@@ -3,7 +3,9 @@ const router = express.Router();
 const {isLoggedIn, isLoggedInAndAdmin} = require("../controller/auth.controller");
 const meetupController = require("../controller/meetup.controller");
 const logger = require("../utils/logger")(module);
-
+const beerController = require("../controller/beer.controller");
+const weatherDate = require('../utils/weatherDate');
+const weatherController = require("../controller/weather.controller");
 
 router.post("/create", isLoggedInAndAdmin, async (req, res) => {
     let {name, date} = req.body;
@@ -51,5 +53,30 @@ router.post("/checkin/:id", isLoggedIn, async (req, res) => {
 
 });
 
+router.get("/beerAmounts/:id", isLoggedInAndAdmin, async (req, res) => {
+    try {
+        const meetupID = req.params.id;
+        const beerAmount = await beerController.calculateBeer(meetupID);
+        res.status(200).send(beerAmount.toString());
+    } catch (error) {
+        res.status(500).send(error);
+    }
+  
+})
 
+router.get("/checkWeather/:id", isLoggedIn, async (req, res) => {
+    try {
+        const meetupID = req.params.id;
+        const meetupData = await meetupController.getMeetup(meetupID);
+        const date = weatherDate(meetupData.date);
+        const forecast = await weatherController.getWeatherFor(date);
+        if(!forecast){
+            res.status(206).send("No hay info sobre el clima para esa fecha")
+        } else {
+            res.status(200).send(forecast.temp.max.toString());
+        }   
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
 module.exports = router;

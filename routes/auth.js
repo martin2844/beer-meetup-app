@@ -8,7 +8,7 @@ const logger = require("../utils/logger")(module);
 const {isLoggedIn, isLoggedInAndAdmin} = require("../controller/auth.controller");
 
 
-  router.get("/protectedAdmin", isLoggedInAndAdmin, (req, res) => {
+router.get("/protectedAdmin", isLoggedInAndAdmin, (req, res) => {
     res.send("logged admin");
 })
 

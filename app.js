@@ -4,11 +4,12 @@ const connectDB = require("./config/db");
 const logger = require('./utils/logger')(module);
 const session = require('express-session');
 const passport = require('passport');
-
+const cors = require('cors');
 //initialize express.
 const app = express();
 
-
+//Use Cors
+app.use(cors());
 //Body Parser
 app.use(express.json({ extended: false, limit: '50mb'}));
 app.use(express.urlencoded({extended: false, limit: '50mb' }));
@@ -20,6 +21,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false, maxAge: 1000*60*60*24*30 }
 }));
+
 
 //passport MiddleWare
 app.use(passport.initialize());

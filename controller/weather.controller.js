@@ -17,10 +17,20 @@ const getWeather = async () => {
         forecast.sunset = convertDate(forecast.sunset);
         return forecast
     });
+    return dailyArray;
+}
 
-    return weatherData.data;
+const getWeatherFor = async (date) => {
+    
+    const dailyArray = await getWeather();
+    const weather = dailyArray.filter((forecast) => {
+        return forecast.dt === date;
+    })
+    //What happens if the date is not here? 
+    return weather[0];
 }
 
 module.exports = {
-    getWeather
+    getWeather,
+    getWeatherFor
 }

@@ -3,7 +3,7 @@ const isLoggedIn = (req, res, next) => {
         console.log(req.user);
         next();
     } else {
-        res.redirect('login');
+        res.status(404).send("Tenes que loguearte")
     }
   }
 

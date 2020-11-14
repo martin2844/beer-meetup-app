@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
     try {
         //Get Weather from controller
         logger.info("Consulting weather");
-        let dailyWeather = weatherController.getWeather();
+        let dailyWeather = await weatherController.getWeather();
         res.status(200).send(dailyWeather);
     } catch (error) {
         logger.error(error.message);
