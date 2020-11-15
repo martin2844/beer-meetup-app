@@ -19,7 +19,7 @@ const Meetup = () => {
         populate();
         
     }, [])
-
+  
     const Cards = meetups.map((m) => {
         let formatDate = m.date.substr(0, m.date.indexOf("T"));
         return(

@@ -8,6 +8,9 @@ const cors = require('cors');
 //initialize express.
 const app = express();
 
+//services
+require('./services/cache');
+
 //Use Cors
 app.use(cors());
 //Body Parser

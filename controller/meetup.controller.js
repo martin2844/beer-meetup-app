@@ -67,7 +67,7 @@ const getMeetup = async (id) => {
 
 const getAllMeetups = async () => {
     try {
-        const meetups = await Meetup.find();
+        const meetups = await Meetup.find().cache();
         return meetups;
     } catch (error) {
         return error;
