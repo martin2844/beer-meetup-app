@@ -10,7 +10,7 @@ const Home = () => {
           <hr className="my-2" />
           <p>Crea Meetups, a través de este sistema hecho en MERN - Mongo, Express, React y Node (con Redis)</p>
           <p className="lead">
-            <Link to="/meetups"><Button color="primary">Crea una Meetup</Button></Link>
+            <Link to="/meetups"><Button color="primary">Ver Meetups</Button></Link>
           </p>
         </Jumbotron>
       </div>

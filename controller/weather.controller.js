@@ -1,7 +1,23 @@
 const axios = require("axios");
 const convertDate = require('../utils/unixDate');
+const redis = require('../services/cache');
+const util = require('util');
+const logger = require("../utils/logger")(module);
+//Promesify;
+redis.get = util.promisify(redis.get);
+redis.set = util.promisify(redis.set);
 
 const getWeather = async () => {
+    logger.info("getting weather");
+    //First Check cache
+    // Key set
+    const key = 'weather';
+    const cacheVal = await redis.get(key);
+    if(cacheVal) {
+        logger.info("Serving Cache");
+        const cachedDoc = JSON.parse(cacheVal);
+        return cachedDoc;
+    }
     //Lat and Long from BA
     const lat = -34.4708198;
     const lon = -58.5286478;
@@ -17,6 +33,8 @@ const getWeather = async () => {
         forecast.sunset = convertDate(forecast.sunset);
         return forecast
     });
+    logger.info("Serving Api Data");
+    redis.set(key, JSON.stringify(dailyArray), 'EX', 60 * 5);
     return dailyArray;
 }
 

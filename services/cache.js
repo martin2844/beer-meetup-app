@@ -56,3 +56,5 @@ mongoose.Query.prototype.exec = async function () {
     client.set(key, JSON.stringify(result), 'EX', 60 * 5);
     return result;
 }
+
+module.exports = client

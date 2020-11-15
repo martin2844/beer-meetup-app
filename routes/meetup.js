@@ -89,6 +89,10 @@ router.get("/checkWeather/:id", isLoggedIn, async (req, res) => {
     try {
         const meetupID = req.params.id;
         const meetupData = await meetupController.getMeetup(meetupID);
+        if(!meetupData) {
+            res.status(404).send("No existe esta meetup");
+            return;
+        }
         const date = weatherDate(meetupData.date);
         const forecast = await weatherController.getWeatherFor(date);
         if(!forecast){
@@ -97,6 +101,7 @@ router.get("/checkWeather/:id", isLoggedIn, async (req, res) => {
             res.status(200).send(forecast.temp.max.toString());
         }   
     } catch (error) {
+        console.log(error);
         res.status(500).send(error);
     }
 })
