@@ -8,11 +8,17 @@ import Layout from './components/Layout';
 import {UserProvider} from './UserContext';
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {Helmet} from 'react-helmet';
+
+
+//Pages
 import Home from './pages/Home'
-import Meetup from './pages/Meetup';
+import Meetups from './pages/Meetups';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
-import {Helmet} from 'react-helmet';
+import Meetup from './pages/Meetup';
+
+
 
 const App = () => {
   return (
@@ -29,7 +35,10 @@ const App = () => {
          <Home />
        </Route>
        <Route exact path="/meetups">
-         <Meetup />
+         <Meetups />
+       </Route>
+       <Route exact path="/meetups/:id" >
+         <Meetup /> 
        </Route>
        <Route exact path="/login">
          <Login />

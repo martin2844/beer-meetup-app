@@ -37,7 +37,9 @@ router.get("/login", (req, res) => {
          logger.info("User Correctly logged in.")
          return res.status(200).send({
            user: user.email,
-           name: user.name
+           name: user.name,
+           id: user._id,
+           isAdmin: user.isAdmin
          });
       });
 
@@ -93,7 +95,9 @@ router.post(
         logger.info("User Correctly registered")
         res.send({
           email: user.email,
-          name: user.name
+          name: user.name,
+          id: user._id,
+          isAdmin: user.isAdmin
         });        
       } catch (err) {
           logger.error(err.message);

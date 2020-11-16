@@ -85,7 +85,28 @@ router.get("/beerAmounts/:id", isLoggedInAndAdmin, async (req, res) => {
 })
 
 //Check weather for meetup with id
-router.get("/checkWeather/:id", isLoggedIn, async (req, res) => {
+router.get("/checkWeather/:id", async (req, res) => {
+    try {
+        const meetupID = req.params.id;
+        const meetupData = await meetupController.getMeetup(meetupID);
+        if(!meetupData) {
+            res.status(404).send("No existe esta meetup");
+            return;
+        }
+        const date = weatherDate(meetupData.date);
+        const forecast = await weatherController.getWeatherFor(date);
+        if(!forecast){
+            res.status(206).send("No hay info sobre el clima para esa fecha")
+        } else {
+            res.status(200).send(forecast);
+        }   
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+})
+
+router.get("/checkTemp/:id", async (req, res) => {
     try {
         const meetupID = req.params.id;
         const meetupData = await meetupController.getMeetup(meetupID);
@@ -106,6 +127,7 @@ router.get("/checkWeather/:id", isLoggedIn, async (req, res) => {
     }
 })
 
+
 router.get("/getAll", async (req, res) => {
     try {
         const meetups = await meetupController.getAllMeetups();
@@ -114,4 +136,15 @@ router.get("/getAll", async (req, res) => {
         res.status(500).send(error);
     }
 })
+
+router.get("/get/:id", async (req, res) => {
+    const meetupID = req.params.id;
+    try {
+        const meetup = await meetupController.getMeetup(meetupID);
+        res.status(200).send(meetup);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 module.exports = router;

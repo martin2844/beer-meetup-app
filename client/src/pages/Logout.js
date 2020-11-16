@@ -10,17 +10,15 @@ const Logout = () => {
     useEffect(() => {
         axios.get("/api/auth/logout").then((x) => {
             console.log(x);
-            console.log("then")
-            setLoggedOut(true);
-            setUserData({
-                isAuthenticated: false,
-                user: {
-                    name: '',
-                    email: ''
-                }
-            })
+        });
+        setUserData({
+            isAuthenticated: false,
+            user: {
+                name: '',
+                email: ''
+            }
         })
-
+        setLoggedOut(true);
     }, [])
 
 

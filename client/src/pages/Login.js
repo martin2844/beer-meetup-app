@@ -29,12 +29,16 @@ const Login = () => {
         if(auth.status === 200) {
           let {name} = auth.data;
           let email = auth.data.user;
+          let id = auth.data.id;
+          let isAdmin = auth.data.isAdmin
           //Auth user
           setUserData({
             isAuthenticated: true,
             user: {
                 name: name,
-                email: email
+                email: email,
+                id: id,
+                isAdmin: isAdmin
             }
         }) 
         setRedirect(true);
@@ -78,16 +82,20 @@ const Login = () => {
       if(auth.status === 200) { 
         let {name} = auth.data;
         let email = auth.data.user;
+        let id = auth.data.id;
+        let isAdmin = auth.data.isAdmin
         setUserData({
           isAuthenticated: true,
           user: {
               name: name,
-              email: email
+              email: email,
+              id: id,
+              isAdmin: isAdmin
           }
       }) 
       setRedirect(true);
       } else {
-        
+
         setAlert2({
           alert: true,
           message: JSON.stringify(auth.data)

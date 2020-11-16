@@ -34,6 +34,14 @@ const addAttendee = async (id, user_id) => {
     logger.info("Adding atendee for meetup " + id);
     try {
         const meetup = await Meetup.findById(id);
+        let filter = meetup.attendees.filter((x) => {
+            return JSON.stringify(x) === JSON.stringify(user_id);
+        });
+        console.log(filter);
+        if(filter.length) {
+            logger.info("Attendee allready present")
+            return false
+        }
         meetup.attendees.push(user_id);
         await meetup.save();
         return true;
@@ -58,7 +66,7 @@ const checkIn = async (id, user_id) => {
 
 const getMeetup = async (id) => {
     try {
-        const meetup = await Meetup.findById(id);
+        const meetup = await Meetup.findById(id).cache();
         return meetup;
     } catch (error) {
         return error;

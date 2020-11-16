@@ -1,46 +1,93 @@
-import React, {useState, useEffect} from 'react'
-import axios from 'axios'
+import React, {useEffect, useState, useContext} from 'react'
+import {useParams} from 'react-router-dom'
+import axios from 'axios';
 import { Card, Button, CardTitle, CardText, Spinner } from 'reactstrap';
-import {Link} from 'react-router-dom'
+import {UserContext} from '../UserContext';
+
 const Meetup = () => {
-    
-    
-    const [meetups, setMeetups] = useState([]);
+    let { id } = useParams();
+    const [meetUp, setMeetup] = useState({});
     const [loading, setLoading] = useState(true);
-    
+    const [weather, setWeather] = useState({});
+    const [user] = useContext(UserContext);
+
     useEffect(() => {
-        const populate = async () => {
-        let meetupRequest = await axios.get("/api/meetup/getAll");
-        setMeetups(meetupRequest.data);
-        setTimeout(() => {
+        axios.get(`/api/meetup/get/${id}`).then((res) => {
+            res.data.date = res.data.date.substr(0, res.data.date.indexOf("T"));
+            setMeetup(res.data);
+            axios.get(`/api/meetup/checkWeather/${id}`).then((res) => {
+                setWeather(res.data);
+            }).catch(x => console.log(x));
+            if(user.user.isAdmin) {
+                console.log("DO BEER LOGIC HERE")
+            }
             setLoading(false);
-        }, 200);
-        } 
-        populate();
-        
+        }).catch(x => console.log(x));
     }, [])
-  
-    const Cards = meetups.map((m) => {
-        let formatDate = m.date.substr(0, m.date.indexOf("T"));
-        return(
-        <Card key={m._id} body>
-            <CardTitle tag="h5">{m.name}</CardTitle>
-            <CardText>Fecha: {formatDate}</CardText>
-            <CardText>Gente Confirmada: {m.attendees.length}</CardText>
-            <Link to="/"><Button>Ver más Info</Button></Link>
+
+    let attend = async () => {
+        console.log("attending")
+        let rsvp = axios.post(`/api/meetup/attend/${id}`);
+        console.log(rsvp.data);
+
+    }
+
+    let card;
+    let forecast;
+    let rsvp;
+    if(weather.temp) {
+        forecast = (
+            <div style={{backgroundColor: "#f8f9fa"}}>
+            <CardText>Va haber una máxima de {weather.temp.max}°C</CardText>
+            <CardText>y una minima de {weather.temp.min}°C</CardText>
+            <CardText>Estado general: {weather.weather[0].description}</CardText>
+            </div>
+        )
+    }
+    console.log(meetUp)
+    if(user.isAuthenticated && meetUp.name) {
+        let isRsvp;
+        let filter = meetUp.attendees.filter((x) => {
+            return x === user.user.id
+        });
+        console.log(filter);
+        if(filter.length === 0){
+            rsvp = (
+                <>
+                <br/> 
+                   <Button onClick={() => attend()}>Anotate para la meetup</Button>
+                </>
+            )
+        } else {
+            rsvp = (
+                <>  
+                <br/> 
+                   <CardText><h6>Ya estas anotado para esta meetup!</h6></CardText>
+                </>
+            )
+        }
+      
+    }
+    if(meetUp.name) {
+        card = (
+            <Card body>
+            <CardTitle tag="h5">{meetUp.name}</CardTitle>
+            <CardText>Fecha: {meetUp.date}</CardText>
+            <CardText>Gente Confirmada: {meetUp.attendees.length}</CardText>
+            {forecast}
+            {rsvp}
           </Card>
         )
-    } )
+    }
+
+
+    console.log(user);
+  
 
     return (
-        <div>
-            <h1>Meetups</h1>
-            <br></br>
-            <div className="card-container">
-            {loading ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : [Cards]}
-            </div>
-          
-        </div>
+        <section className="card-container">
+            {loading ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : card}
+        </section>
     )
 }
 

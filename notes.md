@@ -91,3 +91,10 @@ Utils:
 Config: 
 * Db Config
 * Auth Config
+
+
+## Notes 
+
+To add 
+
+Isadmin to user context
