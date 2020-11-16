@@ -27,6 +27,9 @@ const MyNavbar = (props) => {
             <NavItem>
               <NavLink  tag={Link}  to='/meetups' >Meetups</NavLink>
             </NavItem>
+            {user.user.isAdmin ?  <NavItem>
+              <NavLink tag={Link} to="/create">Crear Meetup</NavLink>
+            </NavItem> : null}
             <NavItem>
               <NavLink href="https://github.com/martin2844">GitHub</NavLink>
             </NavItem>

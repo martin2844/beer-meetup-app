@@ -3,27 +3,43 @@ import {useParams} from 'react-router-dom'
 import axios from 'axios';
 import { Card, Button, CardTitle, CardText, Spinner } from 'reactstrap';
 import {UserContext} from '../UserContext';
+import SessionCheck from '../SessionCheck';
 
 const Meetup = () => {
     let { id } = useParams();
     const [meetUp, setMeetup] = useState({});
     const [loading, setLoading] = useState(true);
     const [weather, setWeather] = useState({});
+    const [beerData, setBeerData] = useState(false);
     const [user] = useContext(UserContext);
-
+    SessionCheck();
     useEffect(() => {
         axios.get(`/api/meetup/get/${id}`).then((res) => {
             res.data.date = res.data.date.substr(0, res.data.date.indexOf("T"));
             setMeetup(res.data);
             axios.get(`/api/meetup/checkWeather/${id}`).then((res) => {
                 setWeather(res.data);
+                if(user.user.isAdmin) {
+                    console.log("DO BEER LOGIC HERE")
+                    axios.get(`/api/meetup/beerAmounts/${id}`).then((res) => {
+                        setBeerData(res.data);
+                        setTimeout(() => {
+                            setLoading(false);
+                        }, 500);
+                    }).catch(x => console.log(x));
+                } else {
+                    setTimeout(() => {
+                        setLoading(false);
+                    }, 500);
+                }
+                
             }).catch(x => console.log(x));
-            if(user.user.isAdmin) {
-                console.log("DO BEER LOGIC HERE")
-            }
-            setLoading(false);
+        
+        
         }).catch(x => console.log(x));
     }, [])
+
+    console.log(beerData);
 
     let attend = async () => {
         console.log("attending")
@@ -46,11 +62,9 @@ const Meetup = () => {
     }
     console.log(meetUp)
     if(user.isAuthenticated && meetUp.name) {
-        let isRsvp;
         let filter = meetUp.attendees.filter((x) => {
             return x === user.user.id
         });
-        console.log(filter);
         if(filter.length === 0){
             rsvp = (
                 <>
@@ -62,7 +76,7 @@ const Meetup = () => {
             rsvp = (
                 <>  
                 <br/> 
-                   <CardText><h6>Ya estas anotado para esta meetup!</h6></CardText>
+                   <CardText><strong>Ya estas anotado para esta meetup!</strong></CardText>
                 </>
             )
         }
@@ -76,6 +90,8 @@ const Meetup = () => {
             <CardText>Gente Confirmada: {meetUp.attendees.length}</CardText>
             {forecast}
             {rsvp}
+            <br/>
+            {beerData ? `Hacen falta 🍺 ${beerData} cajas de cerveza para esta meetup` : null}
           </Card>
         )
     }

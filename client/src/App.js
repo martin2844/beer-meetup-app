@@ -17,6 +17,7 @@ import Meetups from './pages/Meetups';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
 import Meetup from './pages/Meetup';
+import Create from './pages/Create';
 
 
 
@@ -45,6 +46,9 @@ const App = () => {
        </Route>
        <Route exact path="/logout">
          <Logout />
+       </Route>
+       <Route exact path="/create">
+         <Create />
        </Route>
        </Switch>
        </Layout>

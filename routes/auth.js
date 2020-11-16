@@ -13,7 +13,7 @@ router.get("/protectedAdmin", isLoggedInAndAdmin, (req, res) => {
 })
 
 router.get("/protected", isLoggedIn, (req, res) => {
-     res.send("logged");
+     res.send(true);
 })
 
 router.get("/login", (req, res) => {
