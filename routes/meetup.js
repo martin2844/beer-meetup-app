@@ -9,14 +9,16 @@ const weatherController = require("../controller/weather.controller");
 
 //Create Meetup
 router.post("/create", isLoggedInAndAdmin, async (req, res) => {
+    console.log(req.body);
     let {name, date} = req.body;
     //Date manipulation for it to be a correct format for our schema
-    date = date.split(' ');
-    let date1 = date[0].split(/\//);
-    let time = date[1];
-    let newDate = date1[1] + '/' + date1[0] + '/' + date1[2] + ' ' + time;
-    var formatedDate = new Date(newDate);
-
+    // date = date.split(' ');
+    // let date1 = date[0].split(/\//);
+    // let time = date[1];
+    // let newDate = date1[1] + '/' + date1[0] + '/' + date1[2] + ' ' + time;
+    // console.log(newDate);
+    var formatedDate = new Date(date);
+    console.log(formatedDate);
     let meetupData = {
         name,
         date: formatedDate,

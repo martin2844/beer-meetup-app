@@ -23,10 +23,10 @@ const Logout = () => {
 
 
     return (
-        <div>
+        <>
             {loggedOut && <Redirect to='/'/> }
             
-        </div>
+        </>
     )
 }
 

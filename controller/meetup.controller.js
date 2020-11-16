@@ -1,5 +1,8 @@
 const Meetup = require('../models/Meetup');
 const logger = require('../utils/logger')(module);
+const redis = require("../services/cache");
+const util = require("util");
+redis.del = util.promisify(redis.del);
 
 const deleteMeetup = async(id) => {
     logger.info("About to delete meetup: " + id);
@@ -23,6 +26,7 @@ const createMeetup = async (meetupData) => {
     try {
         await meetUp.save();
         logger.info("Successfully created meetup: " + meetUp.name + "With id: " + meetUp._id);
+        redis.del('{"collection":"meetups"}');
         return meetUp;
     } catch (error) {
         return error
@@ -70,7 +74,7 @@ const getMeetup = async (id) => {
         return meetup;
     } catch (error) {
         return error;
-    }
+    } 
 }
 
 const getAllMeetups = async () => {

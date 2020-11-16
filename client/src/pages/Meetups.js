@@ -11,6 +11,11 @@ const Meetups = () => {
     useEffect(() => {
         const populate = async () => {
         let meetupRequest = await axios.get("/api/meetup/getAll");
+        meetupRequest.data.sort(function(a,b){
+            // Turn your strings into dates, and then subtract them
+            // to get a value that is either negative, positive, or zero.
+            return new Date(a.date) - new Date(b.date);
+          });
         setMeetups(meetupRequest.data);
         setTimeout(() => {
             setLoading(false);
