@@ -17,26 +17,20 @@ Endpoint básico de obtener temperatura
 ```
 * Como usuario y como admin quiero poder recibir notificaciones para estar al tanto de las meetups. 
 ```
-Basicamente, hay dos facetas de este punto. Primero estructurar que cada usuario en la BD tenga notificaciones.
-Cada notificacion es un objeto. Con lo cual dentro del Schema del usuario vamos a tener lo siguiente:
+Cambio esto, la notificacion es un esquema en si mismo asi:
 
-notifications: {
-    message: {
-        type: String,
-        required: true
-    },
-    isRead: {
-        type: boolean
-    },
-    date: {
-        type: Date,
-        default: Date.now 
-    }
+notificacion
+{
+    _id: int;
+    sender: _id del que manda;
+    receiver: _.id del que recibe;
+    type: string; 
+    content: string;
+    is_read: boolean;
+    created_at: Date;
 }
 
-Se le podrìa agregar notificaciones por email.
 
-La segunda faceta serìa en el front, es decir, cuando el usuario está navegando tiene una pestaña de notificaciones. Cuantas levantaria de la BD, como las levanta. Etc.
 ```    
 * Como admin quiero armar una meetup para poder invitar otras personas.  - DONE    
 ```

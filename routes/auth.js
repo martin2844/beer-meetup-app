@@ -6,6 +6,7 @@ const passport = require('passport');
 const User = require("../models/User");
 const logger = require("../utils/logger")(module);
 const {isLoggedIn, isLoggedInAndAdmin} = require("../controller/auth.controller");
+const notificationController = require('../controller/notification.controller');
 
 
 router.get("/protectedAdmin", isLoggedInAndAdmin, (req, res) => {
@@ -108,7 +109,8 @@ router.post(
   );
 
   router.get('/logout',(req,res) => {
-    logger.info("Logging out user: " + req.user.name);
+    console.log(req.user);
+    logger.info("Logging out user: " + req.user);
     req.session.destroy((err) => {
         if(err) {
           logger.error(error);
@@ -118,5 +120,26 @@ router.post(
         res.status(200).send("Logout correcto :)")
     });})
 
+
+router.get("/notification", isLoggedIn, async (req,res) => {
+  try {
+    console.log(req.user_id);
+    const data = await notificationController.getNotifications(req.user._id)
+    res.status(200).send(data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+})
+
+router.get("/readNotifications", isLoggedIn, async (req,res) => {
+  try {
+    console.log(req.user_id);
+    const data = await notificationController.readNotifications(req.user._id);
+    res.status(200).send(data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+})
+  
   
 module.exports = router;

@@ -1,7 +1,9 @@
 const Meetup = require('../models/Meetup');
+const User = require('../models/User');
 const logger = require('../utils/logger')(module);
 const redis = require("../services/cache");
 const util = require("util");
+const notificationController = require('./notification.controller');
 redis.del = util.promisify(redis.del);
 
 const deleteMeetup = async(id) => {
@@ -27,6 +29,23 @@ const createMeetup = async (meetupData) => {
         await meetUp.save();
         logger.info("Successfully created meetup: " + meetUp.name + "With id: " + meetUp._id);
         redis.del('{"collection":"meetups"}');
+
+        const notificationPromises = []
+        //Get all users
+        const users = await User.find();
+        //Send notifications to all users.
+        users.forEach((user) => {
+            const notification = {
+                sender: meetUp._id,
+                content: `Se creo una nueva meetup: ${meetUp.name}`,
+                receiver: user._id
+            }
+            notificationPromises.push(notificationController.createNotification(notification));
+        })
+
+        Promise.all(notificationPromises).then(x => console.log("Sent Notifications")).catch(x => console.log(x));
+   
+        
         return meetUp;
     } catch (error) {
         return error
@@ -77,6 +96,25 @@ const getMeetup = async (id) => {
     } 
 }
 
+const getMeetupAttendees = async (id) => {
+    try {
+        const meetup = await Meetup.findById(id).cache();
+        let attendeePromises = [];
+        meetup.attendees.forEach(async (at) => {
+            attendeePromises.push(User.findById(at));
+            
+        })
+        let attendees = await Promise.all(attendeePromises);
+        attendees = attendees.map((at) => {
+            return at.name;
+        })
+        console.log(attendees);
+        return attendees;
+    } catch (error) {
+        return error;
+    }
+}
+
 const getAllMeetups = async () => {
     try {
         const meetups = await Meetup.find().cache();
@@ -96,5 +134,6 @@ module.exports = {
     checkIn,
     getMeetup,
     deleteMeetup,
-    getAllMeetups
+    getAllMeetups,
+    getMeetupAttendees
 }

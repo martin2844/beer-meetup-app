@@ -149,4 +149,15 @@ router.get("/get/:id", async (req, res) => {
     }
 })
 
+router.get("/getAttendees/:id", async (req, res) => {
+    const meetupID = req.params.id;
+    try {
+        const meetup = await meetupController.getMeetupAttendees(meetupID);
+        res.status(200).send(meetup);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
+
 module.exports = router;

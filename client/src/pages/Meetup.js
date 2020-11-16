@@ -11,12 +11,16 @@ const Meetup = () => {
     const [loading, setLoading] = useState(true);
     const [weather, setWeather] = useState({});
     const [beerData, setBeerData] = useState(false);
+    const [attendees, setAttendees] = useState([]);
     const [user] = useContext(UserContext);
     SessionCheck();
     useEffect(() => {
         axios.get(`/api/meetup/get/${id}`).then((res) => {
             res.data.date = res.data.date.substr(0, res.data.date.indexOf("T"));
             setMeetup(res.data);
+            axios.get(`/api/meetup/getAttendees/${id}`).then((res) => {
+                setAttendees(res.data);
+            }).catch(x => console.log(x));
             axios.get(`/api/meetup/checkWeather/${id}`).then((res) => {
                 setWeather(res.data);
                 if(user.user.isAdmin) {
@@ -47,6 +51,22 @@ const Meetup = () => {
         console.log(rsvp.data);
 
     }
+    console.log(attendees);
+    let attendeesMap;
+    if(attendees.length === 1) {
+        attendeesMap = attendees.map((at) => {
+            return(
+                <span>{at}</span>
+            )
+        })
+    } else { 
+        attendeesMap = attendees.map((at) => {
+            return(
+                <strong> {at} </strong>
+            )
+        })
+    }
+  
 
     let card;
     let forecast;
@@ -60,7 +80,8 @@ const Meetup = () => {
             </div>
         )
     }
-    console.log(meetUp)
+
+
     if(user.isAuthenticated && meetUp.name) {
         let filter = meetUp.attendees.filter((x) => {
             return x === user.user.id
@@ -88,6 +109,7 @@ const Meetup = () => {
             <CardTitle tag="h5">{meetUp.name}</CardTitle>
             <CardText>Fecha: {meetUp.date}</CardText>
             <CardText>Gente Confirmada: {meetUp.attendees.length}</CardText>
+            <CardText>{attendeesMap}</CardText>
             {forecast}
             {rsvp}
             <br/>

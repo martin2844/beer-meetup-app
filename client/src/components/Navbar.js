@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   Collapse,
   Navbar,
@@ -6,16 +6,61 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink
+  NavLink,
+  Modal, ModalHeader, ModalBody, ModalFooter,
+  Button, ListGroup, ListGroupItem
 } from 'reactstrap';
 import { Link } from 'react-router-dom'
 import {UserContext} from '../UserContext';
+import axios from 'axios';
+import { useLocation } from 'react-router-dom'
 
 const MyNavbar = (props) => {
   const [user] = useContext(UserContext);
+  const [notifications, setNotifications] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  console.log(user);
   const toggle = () => setIsOpen(!isOpen);
+  const [modal, setModal] = useState(false);
+  const toggle2 = () => setModal(!modal);
+  const location = useLocation();
+  const [notCount, setNotCount] = useState(null);
+
+  useEffect(() => {
+    if(user.isAuthenticated) {
+      axios.get("/api/auth/notification").then((x) => {
+        setNotifications(x.data);
+      }).catch(x => console.log(x));
+    }
+  }, [location])
+
+  let filteredNotifications = notifications.filter((not) => {
+    return not.isRead === false;
+  })
+
+  useEffect(() => {
+    setNotCount(filteredNotifications.length);
+  }, [filteredNotifications])
+
+  let notMap = filteredNotifications.map((not) => {
+    return(
+      <ListGroupItem key={not._id}>{not.content}</ListGroupItem>
+    )
+  })
+
+  const notificationList = (
+    <ListGroup>
+      {notMap}
+    </ListGroup>
+  )
+
+
+  const read = async () => {
+    let readIt = await axios.get("/api/auth/readNotifications");
+    setNotCount(null);
+    setNotifications([]);
+    console.log(readIt);
+  }
+ 
 
   return (
     <div>
@@ -35,6 +80,11 @@ const MyNavbar = (props) => {
             </NavItem>
           </Nav>
           <Nav navbar>
+          {
+            user.isAuthenticated ?
+          <NavItem style={{cursor: "pointer"}}><NavLink onClick={toggle2}>Notificaciones {notCount ? `(${notCount})` : null}</NavLink></NavItem> 
+            : null
+          }
           <NavItem>
              {
                user.isAuthenticated ? 
@@ -47,6 +97,16 @@ const MyNavbar = (props) => {
           
         </Collapse>
       </Navbar>
+
+      <Modal isOpen={modal} toggle={toggle2} className="Class">
+        <ModalHeader toggle={toggle2}>Notificaciones</ModalHeader>
+        <ModalBody>
+          {notificationList}
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={() => read()}>Marcar como leidas</Button>
+        </ModalFooter>
+      </Modal>  
     </div>
   );
 }

@@ -12,7 +12,7 @@ Database is done with MongoDB.
 Caching is done via Redis. We are caching mongoose operations by tapping into the mongoose exec function.     
 We are caching the weather API as well. Cache lasts 5 minutes.  
 
-# Endpoints: 
+# Backend Endpoints: 
 
 ## Auth
 ### Login
@@ -74,6 +74,21 @@ Example JSON:
 
 ### Gets information from all Meetups
 **GET** - `/api/meetup/getAll`
+
+# Front End in React:
+The front end is basically a quick and raw Create React App.
+
+If features:
+* Global Context using useContext hook.
+* Protected Front End Routes
+* Creation of meetups if user is Admin
+* Login and Logging out
+* Registration of users
+* Notifications being sent to every user every time a meetup is created.
+* Use Effect and UseState Hooks 
+* Basic usage of reactstrap
+* If user is admin, he can quickly check the amount of beer needed for a meetup based on attendees and weather
+* Conditional Rendering
 
 
 # How to deploy:
