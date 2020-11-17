@@ -92,7 +92,8 @@ const Login = () => {
               id: id,
               isAdmin: isAdmin
           }
-      }) 
+      })
+      localStorage.setItem('user', JSON.stringify(user));
       setRedirect(true);
       } else {
 

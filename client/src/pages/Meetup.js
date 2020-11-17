@@ -43,15 +43,14 @@ const Meetup = () => {
         }).catch(x => console.log(x));
     }, [])
 
-    console.log(beerData);
+    
 
     let attend = async () => {
         console.log("attending")
-        let rsvp = axios.post(`/api/meetup/attend/${id}`);
+        let rsvp = await axios.post(`/api/meetup/attend/${id}`);
         console.log(rsvp.data);
-
     }
-    console.log(attendees);
+  
     let attendeesMap;
     if(attendees.length === 1) {
         attendeesMap = attendees.map((at) => {
