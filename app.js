@@ -5,6 +5,7 @@ const logger = require('./utils/logger')(module);
 const session = require('express-session');
 const passport = require('passport');
 const cors = require('cors');
+const path = require('path');
 //initialize express.
 const app = express();
 
