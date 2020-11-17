@@ -32,7 +32,7 @@ const Login = () => {
           let id = auth.data.id;
           let isAdmin = auth.data.isAdmin
           //Auth user
-          setUserData({
+          let AuthUser = {
             isAuthenticated: true,
             user: {
                 name: name,
@@ -40,8 +40,11 @@ const Login = () => {
                 id: id,
                 isAdmin: isAdmin
             }
-        }) 
+        }
+          
+          setUserData(AuthUser) 
         setRedirect(true);
+        localStorage.setItem('user', JSON.stringify(AuthUser));
         }
       } catch (error) {
         console.log("is this happening?")
@@ -94,7 +97,7 @@ const Login = () => {
           }
       }
         setUserData(NewUser);
-      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(NewUser));
       setRedirect(true);
       } else {
 
