@@ -84,7 +84,7 @@ const Login = () => {
         let email = auth.data.user;
         let id = auth.data.id;
         let isAdmin = auth.data.isAdmin
-        setUserData({
+        let NewUser = {
           isAuthenticated: true,
           user: {
               name: name,
@@ -92,7 +92,8 @@ const Login = () => {
               id: id,
               isAdmin: isAdmin
           }
-      })
+      }
+        setUserData(NewUser);
       localStorage.setItem('user', JSON.stringify(user));
       setRedirect(true);
       } else {
