@@ -45,6 +45,12 @@ app.use("/api/weather", require("./routes/weather"));
 app.use("/api/auth/", require("./routes/auth"));
 app.use("/api/meetup/", require("./routes/meetup"));
 
+
+app.use(express.static('client/build'));
+app.get('*', (req,res) => {
+  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+})
+
 // Add logger process.on
 process.on('unhandledRejection', (reason, p) => {
     logger.error('exception occurred \n' + JSON.stringify(reason) );

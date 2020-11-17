@@ -56,13 +56,13 @@ const Meetup = () => {
     if(attendees.length === 1) {
         attendeesMap = attendees.map((at) => {
             return(
-                <span>{at}</span>
+                <span key={at}>{at}</span>
             )
         })
     } else { 
         attendeesMap = attendees.map((at) => {
             return(
-                <strong> {at} </strong>
+                <strong key={at}> {at} </strong>
             )
         })
     }

@@ -14,6 +14,7 @@ section.main {
   flex-direction: row;
   align-items: flex-start;
   justify-content: center;
+  flex-wrap: wrap;
 
 }
 
@@ -32,4 +33,11 @@ section.main {
 .card-container .card.card-body {
   max-width: 300px;
   margin: 1rem;
+}
+
+@media (max-width: 600px) {
+  .login-form form {
+    padding: 2rem 3rem;
+    margin: 1rem;
+  }
 }

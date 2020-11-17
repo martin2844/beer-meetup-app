@@ -74,7 +74,7 @@ const addAttendee = async (id, user_id) => {
 
 
 }
-
+//Checks a user into a meeting
 const checkIn = async (id, user_id) => {
     logger.info("checking in atendee for meetup " + id);
     try {
@@ -87,6 +87,7 @@ const checkIn = async (id, user_id) => {
     }
 }
 
+//Gets individual Data for a meetup, useful for the FE
 const getMeetup = async (id) => {
     try {
         const meetup = await Meetup.findById(id).cache();
@@ -96,6 +97,7 @@ const getMeetup = async (id) => {
     } 
 }
 
+//Gets the name of all the attendees of a specific Meetup
 const getMeetupAttendees = async (id) => {
     try {
         const meetup = await Meetup.findById(id).cache();
@@ -108,13 +110,13 @@ const getMeetupAttendees = async (id) => {
         attendees = attendees.map((at) => {
             return at.name;
         })
-        console.log(attendees);
         return attendees;
     } catch (error) {
         return error;
     }
 }
 
+//Gets all of the Meetup Data for the FE.
 const getAllMeetups = async () => {
     try {
         const meetups = await Meetup.find().cache();
