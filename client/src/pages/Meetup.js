@@ -5,6 +5,7 @@ import { Card, Button, CardTitle, CardText, Spinner } from 'reactstrap';
 import {UserContext} from '../UserContext';
 import SessionCheck from '../SessionCheck';
 
+
 const Meetup = () => {
     let { id } = useParams();
     const [meetUp, setMeetup] = useState({});
@@ -12,14 +13,16 @@ const Meetup = () => {
     const [weather, setWeather] = useState({});
     const [beerData, setBeerData] = useState(false);
     const [attendees, setAttendees] = useState([]);
+    const [reload, setReload] = useState(false);
     const [user] = useContext(UserContext);
     SessionCheck();
     useEffect(() => {
+
         axios.get(`/api/meetup/get/${id}`).then((res) => {
             res.data.date = res.data.date.substr(0, res.data.date.indexOf("T"));
             setMeetup(res.data);
             axios.get(`/api/meetup/getAttendees/${id}`).then((res) => {
-                setAttendees(res.data);
+                setAttendees(res.data); 
             }).catch(x => console.log(x));
             axios.get(`/api/meetup/checkWeather/${id}`).then((res) => {
                 setWeather(res.data);
@@ -41,7 +44,7 @@ const Meetup = () => {
         
         
         }).catch(x => console.log(x));
-    }, [])
+    }, [reload])
 
     
 
@@ -49,6 +52,7 @@ const Meetup = () => {
         console.log("attending")
         let rsvp = await axios.post(`/api/meetup/attend/${id}`);
         console.log(rsvp.data);
+        setReload(true);
     }
   
     let attendeesMap;
@@ -117,12 +121,10 @@ const Meetup = () => {
         )
     }
 
-
-    console.log(user);
-  
-
+    
     return (
         <section className="card-container">
+          
             {loading ? <Spinner style={{ width: '3rem', height: '3rem' }} /> : card}
         </section>
     )

@@ -67,6 +67,7 @@ const addAttendee = async (id, user_id) => {
         }
         meetup.attendees.push(user_id);
         await meetup.save();
+        redis.del('{"collection":"meetups"}');
         return true;
     } catch (error) {
         return error;
@@ -90,7 +91,7 @@ const checkIn = async (id, user_id) => {
 //Gets individual Data for a meetup, useful for the FE
 const getMeetup = async (id) => {
     try {
-        const meetup = await Meetup.findById(id).cache();
+        const meetup = await Meetup.findById(id);
         return meetup;
     } catch (error) {
         return error;

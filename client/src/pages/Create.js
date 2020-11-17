@@ -14,7 +14,7 @@ const Create = () => {
         if(!user.isAuthenticated && !user.user.isAdmin) {
             setRedirect(true);
         }
-    }, [])
+    }, [user]);
 
     const create = async (e) => {
         e.preventDefault();
